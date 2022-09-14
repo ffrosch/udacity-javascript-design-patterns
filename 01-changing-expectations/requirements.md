@@ -13,8 +13,3 @@
 ### Interaction
 
 - The number of clicks should increment when each cat picture is clicked.
-
-## Attribution
-
-- [cat1](https://play-lh.googleusercontent.com/XVHP0sBKrRJYZq_dB1RalwSmx5TcYYRRfYMFO18jgNAnxHAIA1osxM55XHYTb3LpkV8)
-- [cat2](https://images.unsplash.com/photo-1611267254323-4db7b39c732c)
