@@ -13,30 +13,48 @@ const cats = [
     }
 ]
 
-function createCatElem(name, src) {
-    let div = document.createElement("div");
-    let text = document.createElement("h2");
-    let counter = document.createElement("p");
-    let img = document.createElement("img");
-    div.id = name;
-    text.innerHTML = name;
-    counter.innerHTML = "Clicks: 0";
-    counter.id = name + "Counter";
-    img.src = src;
-    div.appendChild(text);
-    div.appendChild(counter);
-    div.appendChild(img);
-    document.body.appendChild(div);
+function createList(arr) {
+    const list = document.createElement("ul");
+    for (const item of arr) {
+        const listItem = document.createElement("li");
+        listItem.textContent = item.name;
+        listItem.id = item.name;
+        listItem.addEventListener("click", (function (itemCopy) {
+
+            return function () {
+                const view = document.getElementById("view");
+                view.innerHTML = "";
+                let text = document.createElement("h2");
+                let counter = document.createElement("p");
+                let img = document.createElement("img");
+                text.textContent = itemCopy.name;
+                counter.textContent = "Clicks: " + itemCopy.clicks;
+                counter.id = "counter";
+                img.src = itemCopy.src;
+                img.addEventListener("click", function () {
+                    itemCopy.clicks += 1;
+                    counter.textContent = "Clicks: " + itemCopy.clicks;
+                })
+                view.appendChild(text);
+                view.appendChild(counter);
+                view.appendChild(img);
+            }
+
+        })(item));
+        list.appendChild(listItem);
+    }
+
+    const heading = document.createElement("h2");
+    heading.textContent = "Cats";
+    document.body.appendChild(heading);
+    document.body.appendChild(list);
 }
 
-function increaseCounter(catObject, counter) {
-    catObject.clicks += 1;
-    counter.innerHTML = "Clicks: " + catObject.clicks;
+function createView() {
+    const view = document.createElement("div");
+    view.id = "view";
+    document.body.appendChild(view);
 }
 
-for (const cat of cats) {
-    createCatElem(cat.name, cat.src);
-    const div = document.getElementById(cat.name);
-    const counter = div.children.namedItem(cat.name + "Counter");
-    div.addEventListener("click", function () { increaseCounter(cat, counter); });
-}
+createList(cats);
+createView();
