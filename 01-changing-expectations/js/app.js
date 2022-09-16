@@ -1,60 +1,103 @@
-const cats = [
-    {
-        clicks: 0,
-        name: "Nemo",
-        src: "img/Nemo.png",
-        attribution: "https://play-lh.googleusercontent.com/XVHP0sBKrRJYZq_dB1RalwSmx5TcYYRRfYMFO18jgNAnxHAIA1osxM55XHYTb3LpkV8"
+/* ======= Model ======= */
+
+const model = {
+    cats: [
+        {
+            clicks: 0,
+            name: "Nemo",
+            src: "img/Nemo.png",
+            attribution: "https://play-lh.googleusercontent.com/XVHP0sBKrRJYZq_dB1RalwSmx5TcYYRRfYMFO18jgNAnxHAIA1osxM55XHYTb3LpkV8"
+        },
+        {
+            clicks: 0,
+            name: "Seyfried",
+            src: "img/Seyfried.jpeg",
+            attribution: "https://images.unsplash.com/photo-1611267254323-4db7b39c732c"
+        }
+    ]
+};
+
+
+/* ======= Controller ======= */
+
+const controller = {
+
+    currentCat: null,
+
+    init: function () {
+        this.currentCat = model.cats[0];
+        view.init();
     },
-    {
-        clicks: 0,
-        name: "Seyfried",
-        src: "img/Seyfried.jpeg",
-        attribution: "https://images.unsplash.com/photo-1611267254323-4db7b39c732c"
-    }
-]
 
-function createList(arr) {
-    const list = document.createElement("ul");
-    for (const item of arr) {
-        const listItem = document.createElement("li");
-        listItem.textContent = item.name;
-        listItem.id = item.name;
-        listItem.addEventListener("click", (function (itemCopy) {
+    getCats: function () {
+        return model.cats;
+    },
 
-            return function () {
-                const view = document.getElementById("view");
-                view.innerHTML = "";
-                let text = document.createElement("h2");
-                let counter = document.createElement("p");
-                let img = document.createElement("img");
-                text.textContent = itemCopy.name;
-                counter.textContent = "Clicks: " + itemCopy.clicks;
-                counter.id = "counter";
-                img.src = itemCopy.src;
-                img.addEventListener("click", function () {
-                    itemCopy.clicks += 1;
-                    counter.textContent = "Clicks: " + itemCopy.clicks;
-                })
-                view.appendChild(text);
-                view.appendChild(counter);
-                view.appendChild(img);
-            }
+    getCurrentCat: function () {
+        return this.currentCat;
+    },
 
-        })(item));
-        list.appendChild(listItem);
+    incrementCounter: function () {
+        this.currentCat.clicks++;
+        view.render();
+    },
+
+    setCurrentCat: function (cat) {
+        this.currentCat = cat;
+        view.render();
     }
 
-    const heading = document.createElement("h2");
-    heading.textContent = "Cats";
-    document.body.appendChild(heading);
-    document.body.appendChild(list);
 }
 
-function createView() {
-    const view = document.createElement("div");
-    view.id = "view";
-    document.body.appendChild(view);
+
+/* ======= View ======= */
+
+const view = {
+
+    init: function () {
+        // store pointers to our DOM elements for easy access later
+        this.catListElem = document.getElementById("cat-list");
+        this.catContainer = document.getElementById("cat-container");
+        this.catNameElem = document.getElementById("cat-name");
+        this.catImageElem = document.getElementById("cat-img");
+        this.catCountElem = document.getElementById("cat-count");
+
+        this.catImageElem.addEventListener("click", function () {
+            controller.incrementCounter();
+        });
+
+        this.render()
+    },
+
+    createImage: function () {
+        const currentCat = controller.getCurrentCat();
+        this.catCountElem.textContent = currentCat.clicks;
+        this.catNameElem.textContent = currentCat.name;
+        this.catImageElem.src = currentCat.src;
+    },
+
+    createList: function () {
+        const cats = controller.getCats();
+
+        this.catListElem.innerHTML = "";
+        for (const cat of cats) {
+            const elem = document.createElement("li");
+            elem.textContent = cat.name;
+            elem.addEventListener("click", this.addListClick(cat));
+            this.catListElem.appendChild(elem);
+        }
+    },
+
+    addListClick: function (catCopy) {
+        return function () {
+            controller.setCurrentCat(catCopy);
+        }
+    },
+
+    render: function () {
+        this.createList();
+        this.createImage();
+    }
 }
 
-createList(cats);
-createView();
+controller.init();
