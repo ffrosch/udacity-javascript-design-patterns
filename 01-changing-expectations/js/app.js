@@ -1,6 +1,8 @@
 /* ======= Model ======= */
 
 const model = {
+    admin: true,
+    currentCat: null,
     cats: [
         {
             clicks: 0,
@@ -22,10 +24,8 @@ const model = {
 
 const controller = {
 
-    currentCat: null,
-
     init: function () {
-        this.currentCat = model.cats[0];
+        model.currentCat = model.cats[0];
         view.init();
     },
 
@@ -34,16 +34,16 @@ const controller = {
     },
 
     getCurrentCat: function () {
-        return this.currentCat;
+        return model.currentCat;
     },
 
     incrementCounter: function () {
-        this.currentCat.clicks++;
+        model.currentCat.clicks++;
         view.render();
     },
 
     setCurrentCat: function (cat) {
-        this.currentCat = cat;
+        model.currentCat = cat;
         view.render();
     }
 
@@ -81,10 +81,12 @@ const view = {
 
         this.catListElem.innerHTML = "";
         for (const cat of cats) {
-            const elem = document.createElement("li");
-            elem.textContent = cat.name;
-            elem.addEventListener("click", this.addListClick(cat));
-            this.catListElem.appendChild(elem);
+            const li = document.createElement("li");
+            const button = document.createElement("button");
+            button.textContent = cat.name;
+            button.style.display = "block";
+            button.addEventListener("click", this.addListClick(cat));
+            this.catListElem.appendChild(button);
         }
     },
 
