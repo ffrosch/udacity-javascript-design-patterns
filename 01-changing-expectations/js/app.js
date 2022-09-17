@@ -1,7 +1,7 @@
 /* ======= Model ======= */
 
 const model = {
-    admin: true,
+    adminMode: false,
     currentCat: null,
     cats: [
         {
@@ -27,6 +27,7 @@ const controller = {
     init: function () {
         model.currentCat = model.cats[0];
         view.init();
+        adminView.init();
     },
 
     getCats: function () {
@@ -45,6 +46,11 @@ const controller = {
     setCurrentCat: function (cat) {
         model.currentCat = cat;
         view.render();
+    },
+
+    toggleAdminMode: function () {
+        model.adminMode = !model.adminMode;
+        adminView.render(model.adminMode);
     }
 
 }
@@ -99,6 +105,30 @@ const view = {
     render: function () {
         this.createList();
         this.createImage();
+    }
+}
+
+const adminView = {
+    init: function () {
+        this.adminBtn = document.getElementById("admin-btn");
+        this.adminElem = document.getElementById("admin-container");
+        this.amdinForm = document.getElementById("admin-form");
+        this.saveBtn = document.getElementById("save-btn");
+        this.cancelBtn = document.getElementById("cancel-btn");
+
+        this.adminBtn.addEventListener("click", function () {
+            controller.toggleAdminMode();
+        });
+
+        this.render();
+    },
+
+    render: function (isVisible) {
+        if (isVisible) {
+            this.adminElem.style.display = "";
+        } else {
+            this.adminElem.style.display = "none";
+        }
     }
 }
 
