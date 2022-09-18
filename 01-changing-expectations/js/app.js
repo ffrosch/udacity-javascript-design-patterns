@@ -150,9 +150,9 @@ const adminView = {
     render: function (isVisible) {
         // Set form visibility
         if (isVisible) {
-            this.adminElem.style.display = "";
+            this.adminElem.hidden = false;
         } else {
-            this.adminElem.style.display = "none";
+            this.adminElem.hidden = true;
         }
 
         // Fill form with current data
