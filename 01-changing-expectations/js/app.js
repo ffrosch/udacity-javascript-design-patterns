@@ -44,6 +44,15 @@ const controller = {
         adminView.render(model.adminMode);
     },
 
+    saveCurrentCat: function (name, url, clicks) {
+        const cat = model.currentCat;
+        cat.name = name;
+        cat.attribution = url;
+        cat.clicks = clicks;
+        view.render();
+        adminView.render(model.adminMode);
+    },
+
     setCurrentCat: function (cat) {
         model.currentCat = cat;
         view.render();
@@ -135,6 +144,8 @@ const adminView = {
         //   addEventListener("click", localThis.method)
         this.cancelBtn.addEventListener("click", this.fillCurrentData.bind(this));
 
+        this.saveBtn.addEventListener("click", this.saveChangedData.bind(this));
+
         // Render
         this.render();
     },
@@ -145,6 +156,14 @@ const adminView = {
         this.catName.value = currentCat.name;
         this.url.value = currentCat.attribution;
         this.clicks.value = currentCat.clicks;
+    },
+
+    saveChangedData: function () {
+        controller.saveCurrentCat(
+            this.catName.value,
+            this.url.value,
+            this.clicks.value
+        )
     },
 
     render: function (isVisible) {
