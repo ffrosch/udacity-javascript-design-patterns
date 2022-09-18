@@ -40,8 +40,7 @@ const controller = {
 
     incrementCounter: function () {
         model.currentCat.clicks++;
-        view.render();
-        adminView.render(model.adminMode);
+        this.renderAll();
     },
 
     saveCurrentCat: function (name, url, clicks) {
@@ -49,18 +48,21 @@ const controller = {
         cat.name = name;
         cat.attribution = url;
         cat.clicks = clicks;
-        view.render();
-        adminView.render(model.adminMode);
+        this.renderAll();
     },
 
     setCurrentCat: function (cat) {
         model.currentCat = cat;
-        view.render();
-        adminView.render(model.adminMode);
+        this.renderAll();
     },
 
     toggleAdminMode: function () {
         model.adminMode = !model.adminMode;
+        adminView.render(model.adminMode);
+    },
+
+    renderAll: function () {
+        view.render();
         adminView.render(model.adminMode);
     }
 
