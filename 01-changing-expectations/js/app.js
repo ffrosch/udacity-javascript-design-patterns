@@ -128,8 +128,23 @@ const adminView = {
             controller.toggleAdminMode();
         });
 
+        // Passing a method as an argument passes this method without its
+        //   context (parent). The parent can be explicitly passed with "bind".
+        // Alternatively "this" could also be bound to a local variable like so
+        //   let localThis = this;
+        //   addEventListener("click", localThis.method)
+        this.cancelBtn.addEventListener("click", this.fillCurrentData.bind(this));
+
         // Render
         this.render();
+    },
+
+    fillCurrentData: function () {
+        const currentCat = controller.getCurrentCat();
+
+        this.catName.value = currentCat.name;
+        this.url.value = currentCat.attribution;
+        this.clicks.value = currentCat.clicks;
     },
 
     render: function (isVisible) {
@@ -141,10 +156,7 @@ const adminView = {
         }
 
         // Fill form with current data
-        const currentCat = controller.getCurrentCat();
-        this.catName.value = currentCat.name;
-        this.url.value = currentCat.attribution;
-        this.clicks.value = currentCat.clicks;
+        this.fillCurrentData();
     }
 }
 
