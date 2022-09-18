@@ -41,11 +41,13 @@ const controller = {
     incrementCounter: function () {
         model.currentCat.clicks++;
         view.render();
+        adminView.render(model.adminMode);
     },
 
     setCurrentCat: function (cat) {
         model.currentCat = cat;
         view.render();
+        adminView.render(model.adminMode);
     },
 
     toggleAdminMode: function () {
@@ -56,7 +58,7 @@ const controller = {
 }
 
 
-/* ======= View ======= */
+/* ======= Views ======= */
 
 const view = {
 
@@ -110,25 +112,39 @@ const view = {
 
 const adminView = {
     init: function () {
+        // store pointers to our DOM elements for easy access later
         this.adminBtn = document.getElementById("admin-btn");
         this.adminElem = document.getElementById("admin-container");
-        this.amdinForm = document.getElementById("admin-form");
+        this.adminForm = document.getElementById("admin-form");
         this.saveBtn = document.getElementById("save-btn");
         this.cancelBtn = document.getElementById("cancel-btn");
 
+        this.catName = document.getElementById("admin-cat-name");
+        this.url = document.getElementById("admin-url");
+        this.clicks = document.getElementById("admin-clicks");
+
+        // Add click events
         this.adminBtn.addEventListener("click", function () {
             controller.toggleAdminMode();
         });
 
+        // Render
         this.render();
     },
 
     render: function (isVisible) {
+        // Set form visibility
         if (isVisible) {
             this.adminElem.style.display = "";
         } else {
             this.adminElem.style.display = "none";
         }
+
+        // Fill form with current data
+        const currentCat = controller.getCurrentCat();
+        this.catName.value = currentCat.name;
+        this.url.value = currentCat.attribution;
+        this.clicks.value = currentCat.clicks;
     }
 }
 
