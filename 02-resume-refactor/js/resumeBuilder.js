@@ -30,27 +30,27 @@ const model = {
         schools: [
             {
                 name: "Onsabrück University",
-                location: "Osnabrück",
+                location: "Osnabrück, Niedersachsen, Deutschland",
                 degree: "Bachelor of Science",
                 majors: "Biology",
                 dates: "2009-2012",
-                url: "",
+                url: "https://www.uni-osnabrueck.de/",
             },
             {
                 name: "Eberhard Karls University",
-                location: "Tübingen",
+                location: "Tübingen, Baden-Württemberg, Deutschland",
                 degree: "Master of Science",
                 majors: "Geoecology",
                 dates: "2012-2016",
-                url: "",
+                url: "https://uni-tuebingen.de/",
             },
             {
                 name: "University of Alaska Fairbanks",
-                location: "USA",
+                location: "Fairbanks, Alaska, USA",
                 degree: "Exchange",
                 majors: "GIS, Remote Sensing and Data Analysis",
                 dates: "2014-2015",
-                url: "",
+                url: "https://www.uaf.edu/",
             }
         ],
         onlineCourses: [
@@ -109,6 +109,8 @@ const model = {
 const controller = {
     init: function () {
         viewBio.init(model.bio);
+        viewEducation.init(model.education);
+        // viewProjects.init(model.projects.projects);
     },
 };
 
@@ -167,6 +169,51 @@ const viewBio = {
         }
     },
 
+};
+
+const viewEducation = {
+    init: function (data) {
+        this.data = data;
+        this.renderSchools();
+        this.renderOnlineCourses();
+    },
+
+    renderSchools: function () {
+        const schools = this.data.schools;
+
+        schools.forEach(entry => {
+            let wrapper = $(HTMLschoolStart);
+
+            wrapper.append(
+                HTMLschoolName.replace("%data%", entry["name"]).replace("%url%", entry["url"]) +
+                HTMLschoolDegree.replace("%data%", entry["degree"]),
+                HTMLschoolDates.replace("%data%", entry["dates"]),
+                HTMLschoolLocation.replace("%data%", entry["location"]),
+                HTMLschoolMajor.replace("%data%", entry["majors"])
+            );
+
+            $("#education").append(wrapper);
+        })
+
+    },
+
+    renderOnlineCourses: function () {
+        const courses = this.data.onlineCourses;
+
+        $("#education").append(courses ? HTMLonlineClasses : "");
+
+        courses.forEach(entry => {
+            let wrapper = $(HTMLschoolStart);
+
+            wrapper.append(
+                HTMLonlineTitle.replace("%data%", entry["title"]).replace("%url%", entry["url"]) +
+                HTMLonlineSchool.replace("%data%", entry["school"]),
+                HTMLonlineDates.replace("%data%", entry["dates"]),
+            );
+
+            $("#education").append(wrapper);
+        })
+    },
 }
 
 controller.init();
