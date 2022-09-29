@@ -79,10 +79,11 @@ const model = {
         jobs: [
             {
                 employer: "Forstliche Versuchs- und Forschungsanstalt",
-                title: "Wissenschaftliche Mitarbeiter",
+                title: "Wissenschaftlicher Mitarbeiter",
                 location: "Freiburg i. Br.",
                 dates: "07/2017-12/2021",
                 description: "Application Development, Database Design, Project Management",
+                url: "https://fva-bw.de",
             },
             {
                 employer: "Freelancer",
@@ -90,6 +91,7 @@ const model = {
                 location: "Freiburg i. Br.",
                 dates: "in progress",
                 description: "Full Stack, Application Development, Database Design, GIS and Data Analysis",
+                url: "https://florianfrosch.de",
             }
         ]
     },
@@ -111,6 +113,7 @@ const controller = {
         viewBio.init(model.bio);
         viewEducation.init(model.education);
         viewProjects.init(model.projects.projects);
+        viewWork.init(model.work);
     },
 };
 
@@ -214,7 +217,7 @@ const viewEducation = {
             $("#education").append(wrapper);
         })
     },
-}
+};
 
 const viewProjects = {
 
@@ -225,8 +228,6 @@ const viewProjects = {
 
     renderProjects: function () {
         const projects = this.data;
-
-        $("#projects").append(HTMLprojectStart);
 
         projects.forEach(entry => {
             let wrapper = $(HTMLprojectStart);
@@ -242,5 +243,34 @@ const viewProjects = {
         });
     },
 }
+
+const viewWork = {
+
+    init: function (data) {
+        this.data = data;
+        this.renderWork();
+    },
+
+    renderWork: function () {
+        const jobs = this.data.jobs;
+
+        jobs.forEach(entry => {
+            let wrapper = $(HTMLworkStart);
+
+            wrapper.append(
+                HTMLworkEmployer.replace("%data%", entry["employer"]).replace("%url%", entry["url"]) +
+                HTMLworkTitle.replace("%data%", entry["title"]),
+                HTMLworkDates.replace("%data%", entry["dates"]),
+                HTMLworkLocation.replace("%data%", entry["location"]),
+                HTMLworkDescription.replace("%data%", entry["description"])
+            );
+
+            $("#workExperience").append(wrapper);
+
+        });
+
+    },
+
+};
 
 controller.init();
