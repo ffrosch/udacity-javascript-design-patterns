@@ -10,7 +10,7 @@ const model = {
         {
             mobile: "+49 111 1111111",
             email: "email@example.de",
-            github: "https://github.com/ffrosch/",
+            github: "ffrosch",
             twitter: "",
             location: "Hinterzarten",
         },
@@ -24,7 +24,6 @@ const model = {
             "Full Stack Development",
         ],
         biopic: "https://avatars.githubusercontent.com/u/22937059?v=4",
-        display: function () { },
     },
 
     education: {
@@ -74,7 +73,6 @@ const model = {
                 url: "https://www.udacity.com/course/intro-to-machine-learning-nanodegree--nd229",
             }
         ],
-        display: function () { },
     },
 
     work: {
@@ -93,8 +91,7 @@ const model = {
                 dates: "in progress",
                 description: "Full Stack, Application Development, Database Design, GIS and Data Analysis",
             }
-        ],
-        display: function () { }
+        ]
     },
 
     projects: {
@@ -105,7 +102,71 @@ const model = {
                 description: "Python, OpenCV",
                 images: ["images/fry.jpg"],
             }
-        ],
-        display: function () { }
+        ]
     },
 };
+
+const controller = {
+    init: function () {
+        viewBio.init(model.bio);
+    },
+};
+
+const viewBio = {
+
+    init: function (data) {
+        this.data = data;
+        this.renderName();
+        this.renderPic();
+        this.renderContacts();
+        this.renderSkills();
+    },
+
+    renderName: function () {
+        $("#header").prepend(
+            HTMLheaderName.replace("%data%", this.data.name),
+            HTMLheaderRole.replace("%data%", this.data.role)
+        );
+    },
+
+    renderPic: function () {
+        $("#header").append(
+            HTMLbioPic.replace("%data%", this.data.biopic),
+            HTMLwelcomeMsg.replace("%data%", this.data.welcomeMessage)
+        );
+    },
+
+    renderContacts: function () {
+        let entries = Object.entries(this.data.contacts);
+        let contacts = entries.map(([contact, value]) => {
+            let html;
+            if (value) {
+                if (contact === "github") {
+                    html = HTMLgithub;
+                } else if (contact === "email") {
+                    html = HTMLemail;
+                } else {
+                    html = HTMLcontactGeneric;
+                };
+                return html
+                    .replaceAll("%contact%", contact)
+                    .replaceAll("%data%", value);
+            }
+        });
+        $("#topContacts").append(contacts);
+        $("#footerContacts").append(contacts);
+    },
+
+    renderSkills: function () {
+        let skills = this.data.skills;
+        if (skills) {
+            $("#header").append(HTMLskillsStart);
+            $("#skills").append(skills.map(element => {
+                return HTMLskills.replace("%data%", element)
+            }));
+        }
+    },
+
+}
+
+controller.init();
