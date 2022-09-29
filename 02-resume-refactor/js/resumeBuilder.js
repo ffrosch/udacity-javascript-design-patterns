@@ -110,7 +110,7 @@ const controller = {
     init: function () {
         viewBio.init(model.bio);
         viewEducation.init(model.education);
-        // viewProjects.init(model.projects.projects);
+        viewProjects.init(model.projects.projects);
     },
 };
 
@@ -213,6 +213,33 @@ const viewEducation = {
 
             $("#education").append(wrapper);
         })
+    },
+}
+
+const viewProjects = {
+
+    init: function (data) {
+        this.data = data;
+        this.renderProjects();
+    },
+
+    renderProjects: function () {
+        const projects = this.data;
+
+        $("#projects").append(HTMLprojectStart);
+
+        projects.forEach(entry => {
+            let wrapper = $(HTMLprojectStart);
+
+            wrapper.append(
+                HTMLprojectTitle.replace("%data%", entry["title"]),
+                HTMLprojectDates.replace("%data%", entry["dates"]),
+                HTMLprojectDescription.replace("%data%", entry["description"]),
+                HTMLprojectImage.replace("%data%", entry["images"])
+            );
+
+            $("#projects").append(wrapper);
+        });
     },
 }
 
